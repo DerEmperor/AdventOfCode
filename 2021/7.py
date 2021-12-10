@@ -1,99 +1,65 @@
 import time
-from itertools import permutations
 
 
-def part1(segment_code):
-    with open('8_input.txt', 'r') as file:
-        input_ = file.readlines()
+def get_fuel_linear():
+    with open("7_input.txt", "r") as file:
+        data = file.readlines()
 
-    data = []
-    for line in input_:
-        data.append([x.split() for x in line[:-1].split('|')])
+    crabs = []
+    for i in data[0].split(','):
+        crabs.append(int(i))
 
-    counter = 0
-    for display in data:
-        for digit in display[1]:
-            if len(digit) in [len(segment_code[i]) for i in [1, 4, 7, 8]]:
-                counter += 1
+    mini = crabs[0]
+    maxi = crabs[0]
+    for crab in crabs:
+        mini = min(mini, crab)
+        maxi = max(maxi, crab)
 
-    return counter
+    min_fuel = (float('inf'))
+    for pos in range(mini, maxi + 1):
+        fuel = 0
+        for crab in crabs:
+            fuel += abs(crab - pos)
+        if fuel < min_fuel:
+            min_fuel = fuel
+            min_pos = pos
 
-
-def part2(segment_code_perm):
-    with open('8_input.txt', 'r') as file:
-        input_ = file.readlines()
-
-    data = []
-    for line in input_:
-        data.append([x.split() for x in line[:-1].split('|')])
-
-    letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g']
-    result = 0
-    for display in data:
-        perms = permutations(letters)
-        for perm in perms:
-            mapping = dict(zip(letters, perm))
-            for digit_corrupted in display[0]:
-                digit = swap(digit_corrupted, mapping)
-                number = get_digit(digit, segment_code_perm)
-                if number == -1:
-                    break
-            if number == -1:
-                continue
-
-            numbers = []
-            for digit_corrupted in display[1]:
-                digit = swap(digit_corrupted, mapping)
-                number = get_digit(digit, segment_code_perm)
-                if number == -1:
-                    break
-                numbers.append(number)
-
-            if number != -1:
-                number = numbers[0] * 1000 + numbers[1] * 100 + numbers[2] * 10 + numbers[3]
-                result += number
-                break
-
-    return result
+    return [min_fuel, min_pos]
 
 
-def swap(string, mapping):
-    res = ''
-    for c in string:
-        res = res + mapping[c]
-    return res
+def get_fuel_quadratic():
+    with open("7_input.txt", "r") as file:
+        data = file.readlines()
 
+    crabs = []
+    for i in data[0].split(','):
+        crabs.append(int(i))
 
-def get_digit(digit, segment_code_perm):
-    for num, perms in segment_code_perm.items():
-        if digit in perms:
-            return num
-    return -1
+    mini = crabs[0]
+    maxi = crabs[0]
+    for crab in crabs:
+        mini = min(mini, crab)
+        maxi = max(maxi, crab)
+
+    min_fuel = (float('inf'))
+    for pos in range(mini, maxi + 1):
+        fuel = 0
+        for crab in crabs:
+            dif = abs(crab - pos)
+            fuel += dif * (dif + 1) // 2
+        if fuel < min_fuel:
+            min_fuel = fuel
+            min_pos = pos
+
+    return [min_fuel, min_pos]
 
 
 def main():
-    segment_code = {
-        0: ['a', 'b', 'c', 'e', 'f', 'g'],
-        1: ['c', 'f'],
-        2: ['a', 'c', 'd', 'e', 'g'],
-        3: ['a', 'c', 'd', 'f', 'g'],
-        4: ['b', 'c', 'd', 'f'],
-        5: ['a', 'b', 'd', 'f', 'g'],
-        6: ['a', 'b', 'd', 'e', 'f', 'g'],
-        7: ['a', 'c', 'f'],
-        8: ['a', 'b', 'c', 'd', 'e', 'f', 'g'],
-        9: ['a', 'b', 'c', 'd', 'f', 'g']
-    }
+    res = get_fuel_linear()
+    print("{}, {}".format(res[0], res[1]))
 
-    segment_code_perm = {}
-    for digit, code in segment_code.items():
-        segment_code_perm[digit] = [''.join(x) for x in permutations(code)]
-
-    res = part1(segment_code)
-    print(res)
-
-    res = part2(segment_code_perm)
-    print(res)
+    res = get_fuel_quadratic()
+    print("{}, {}".format(res[0], res[1]))
 
 
 if __name__ == '__main__':
@@ -102,4 +68,4 @@ if __name__ == '__main__':
     main()
 
     executionTime = (time.time() - startTime)
-    print('Execution time: ' + str(round(executionTime * 1000, 6)) + ' ms')
+    print('Execution time: ' + str(round(executionTime * 1000, 6)) + " ms")
