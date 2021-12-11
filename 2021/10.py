@@ -1,91 +1,59 @@
 import time
-
-
-def part1():
-    with open('9_input.txt', 'r') as file:
-        input_ = file.readlines()
-
-    map = []
-    for line in input_:
-        map.append([int(x) for x in line[:-1]])
-
-    risk = 0
-    for y in range(len(map)):
-        for x in range(len(map[y])):
-            # Top
-            if y - 1 >= 0 and map[y - 1][x] <= map[y][x]:
-                continue
-            # Bottom
-            if y + 1 < len(map) and map[y + 1][x] <= map[y][x]:
-                continue
-            # Left
-            if x - 1 >= 0 and map[y][x - 1] <= map[y][x]:
-                continue
-            # Right
-            if x + 1 < len(map[y]) and map[y][x + 1] <= map[y][x]:
-                continue
-            risk += map[y][x] + 1
-    return risk
-
-
-def part2():
-    with open('9_input.txt', 'r') as file:
-        input_ = file.readlines()
-
-    map = []
-    for line in input_:
-        map.append([int(x) for x in line[:-1]])
-
-    # get all low points
-    low_points = []
-    for y in range(len(map)):
-        for x in range(len(map[y])):
-            # Top
-            if y - 1 >= 0 and map[y - 1][x] <= map[y][x]:
-                continue
-            # Bottom
-            if y + 1 < len(map) and map[y + 1][x] <= map[y][x]:
-                continue
-            # Left
-            if x - 1 >= 0 and map[y][x - 1] <= map[y][x]:
-                continue
-            # Right
-            if x + 1 < len(map[y]) and map[y][x + 1] <= map[y][x]:
-                continue
-            low_points.append([y, x])
-
-    # find basins
-    basin_sizes = []
-    for low_point in low_points:
-        basin_sizes.append(get_basin_size(map, low_point))
-    basin_sizes.sort(reverse=True)
-    return basin_sizes[0] * basin_sizes[1] * basin_sizes[2]
-
-
-def get_basin_size(map, point):
-    [y, x] = point
-
-    if y < 0 or y >= len(map) or x < 0 or x >= len(map[y]):
-        return 0
-
-    if map[y][x] == 9:
-        return 0
-
-    map[y][x] = 9
-    res = 1
-    res += get_basin_size(map, [y, x + 1])
-    res += get_basin_size(map, [y, x - 1])
-    res += get_basin_size(map, [y + 1, x])
-    res += get_basin_size(map, [y - 1, x])
-    return res
+from statistics import median
 
 
 def main():
-    res = part1()
-    print(res)
+    points_part1 = {'(': 3, ')': 3, '[': 57, ']': 57, '{': 1197, '}': 1197, '<': 25137, '>': 25137}
+    points_part2 = {'(': 1, ')': 1, '[': 2, ']': 2, '{': 3, '}': 3, '<': 4, '>': 4}
+    with open('10_input.txt', 'r') as file:
+        input_ = file.readlines()
 
-    res = part2()
-    print(res)
+    data = []
+    for line in input_:
+        data.append(line[:-1])
+
+    score_corrupted = 0
+    j = 0
+    while j < len(data):
+        c = data[j][0]
+        if c not in ['(', '[', '{', '<']:
+            if c in [')', ']', '}', '>']:
+                score_corrupted += points_part1[c]
+            else:
+                print("ERROR")
+            continue
+
+        i = 0
+        while i < len(data[j]) - 1:
+            a, b = data[j][i], data[j][i + 1]
+            if (a, b) in [('(', ')'), ('[', ']'), ('{', '}'), ('<', '>')]:
+                if i + 2 < len(data[j]):
+                    data[j] = data[j][:i] + data[j][i + 2:]
+                else:
+                    data[j] = data[j][:i]
+                i -= 1
+            elif b in ['(', '[', '{', '<']:
+                i += 1
+            elif b in [')', ']', '}', '>']:
+                # corrupted
+                score_corrupted += points_part1[b]
+                data.pop(j)
+                j -= 1
+                break
+            else:
+                # illegal sign
+                print("ERROR")
+        j += 1
+
+    print(score_corrupted)
+
+    scores_completion = []
+    for line in data:
+        score = 0
+        for i in range(len(line) - 1, -1, -1):
+            score = score * 5 + points_part2[line[i]]
+        scores_completion.append(score)
+    print(median(scores_completion))
 
 
 if __name__ == '__main__':
