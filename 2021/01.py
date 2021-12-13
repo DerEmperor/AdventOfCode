@@ -1,8 +1,10 @@
+import time
+
 import numpy as np
 
 
 def count_increasing():
-    data = np.loadtxt('1_input.txt', dtype='int')
+    data = np.loadtxt('01_input.txt', dtype='int')
 
     number = 0
 
@@ -14,7 +16,7 @@ def count_increasing():
 
 
 def count_increasing_three():
-    data = np.loadtxt('1_input.txt', dtype='int')
+    data = np.loadtxt('01_input.txt', dtype='int')
 
     number = 0
 
@@ -33,4 +35,9 @@ def main():
 
 
 if __name__ == '__main__':
+    startTime = time.time()
+
     main()
+
+    executionTime = (time.time() - startTime)
+    print('Execution time: ' + str(round(executionTime * 1000, 6)) + ' ms')

@@ -2,7 +2,7 @@ import time
 
 
 def get_number_of_fishes_naive(days):
-    with open("6_input.txt", "r") as file:
+    with open("06_input.txt", "r") as file:
         data = file.readlines()
 
     fishes = []
@@ -21,7 +21,7 @@ def get_number_of_fishes_naive(days):
 
 
 def get_number_of_fishes(days):
-    with open("6_input.txt", "r") as file:
+    with open("06_input.txt", "r") as file:
         data = file.readlines()
 
     fishes = [0] * 9

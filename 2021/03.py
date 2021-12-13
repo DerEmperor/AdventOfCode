@@ -1,5 +1,8 @@
+import time
+
+
 def get_power_consumption():
-    with open("3_input.txt", "r") as file:
+    with open("03_input.txt", "r") as file:
         data = file.readlines()
 
     for i in range(len(data)):
@@ -29,7 +32,7 @@ def get_power_consumption():
 
 
 def get_life_support_rating():
-    with open("3_input.txt", "r") as file:
+    with open("03_input.txt", "r") as file:
         data = file.readlines()
 
     for i in range(len(data)):
@@ -86,4 +89,9 @@ def main():
 
 
 if __name__ == '__main__':
+    startTime = time.time()
+
     main()
+
+    executionTime = (time.time() - startTime)
+    print('Execution time: ' + str(round(executionTime * 1000, 6)) + ' ms')

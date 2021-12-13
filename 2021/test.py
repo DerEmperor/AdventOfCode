@@ -1,4 +1,5 @@
 import numpy as np
+from scanf import scanf
 
-s = 'c'
-print(s[0].islower())
+for (a, b) in [(1, 2), (3, 4)]:
+    print(a, b)

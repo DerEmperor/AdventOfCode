@@ -2,7 +2,7 @@ import time
 
 
 def part1():
-    with open('9_input.txt', 'r') as file:
+    with open('09_input.txt', 'r') as file:
         input_ = file.readlines()
 
     map = []
@@ -29,7 +29,7 @@ def part1():
 
 
 def part2():
-    with open('9_input.txt', 'r') as file:
+    with open('09_input.txt', 'r') as file:
         input_ = file.readlines()
 
     map = []
