@@ -5,7 +5,7 @@ from statistics import median
 def main():
     points_part1 = {'(': 3, ')': 3, '[': 57, ']': 57, '{': 1197, '}': 1197, '<': 25137, '>': 25137}
     points_part2 = {'(': 1, ')': 1, '[': 2, ']': 2, '{': 3, '}': 3, '<': 4, '>': 4}
-    with open('10_input.txt', 'r') as file:
+    with open('inputs/10_input.txt', 'r') as file:
         input_ = file.readlines()
 
     data = []

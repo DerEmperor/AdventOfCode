@@ -21,7 +21,7 @@ hex2bin = {
 
 
 def main():
-    with open('16_input.txt', 'r') as file:
+    with open('inputs/16_input.txt', 'r') as file:
         input_ = file.readlines()
     data = ''.join([hex2bin[x] for x in input_[0][:-1]])
 

@@ -4,7 +4,7 @@ import numpy as np
 
 
 def count_increasing():
-    data = np.loadtxt('01_input.txt', dtype='int')
+    data = np.loadtxt('inputs/01_input.txt', dtype='int')
 
     number = 0
 
@@ -16,7 +16,7 @@ def count_increasing():
 
 
 def count_increasing_three():
-    data = np.loadtxt('01_input.txt', dtype='int')
+    data = np.loadtxt('inputs/01_input.txt', dtype='int')
 
     number = 0
 

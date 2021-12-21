@@ -3,7 +3,7 @@ from itertools import permutations
 
 
 def part1(segment_code):
-    with open('08_input.txt', 'r') as file:
+    with open('inputs/08_input.txt', 'r') as file:
         input_ = file.readlines()
 
     data = []
@@ -20,7 +20,7 @@ def part1(segment_code):
 
 
 def part2(segment_code_perm):
-    with open('08_input.txt', 'r') as file:
+    with open('inputs/08_input.txt', 'r') as file:
         input_ = file.readlines()
 
     data = []

@@ -4,7 +4,7 @@ from scanf import scanf
 
 def main():
     steps = 40
-    with open('14_input.txt', 'r') as file:
+    with open('inputs/14_input.txt', 'r') as file:
         input_ = file.readlines()
 
     # process input

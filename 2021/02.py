@@ -2,7 +2,7 @@ import time
 
 
 def get_position():
-    f = open('02_input.txt', "r")
+    f = open('inputs/02_input.txt', "r")
     data = f.readlines()
     f.close()
 
@@ -23,7 +23,7 @@ def get_position():
 
 
 def get_position_with_aim():
-    f = open('02_input.txt', "r")
+    f = open('inputs/02_input.txt', "r")
     data = f.readlines()
     f.close()
 

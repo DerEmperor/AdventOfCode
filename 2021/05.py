@@ -4,7 +4,7 @@ import time
 
 
 def get_overlapping_hor_or_ver():
-    with open("05_input.txt", "r") as file:
+    with open("inputs/05_input.txt", "r") as file:
         data = file.readlines()
 
     coords = []
@@ -31,7 +31,7 @@ def get_overlapping_hor_or_ver():
 
 
 def get_overlapping():
-    with open("05_input.txt", "r") as file:
+    with open("inputs/05_input.txt", "r") as file:
         data = file.readlines()
 
     coords = []

@@ -2,7 +2,7 @@ import time
 
 
 def get_fuel_linear():
-    with open("07_input.txt", "r") as file:
+    with open("inputs/07_input.txt", "r") as file:
         data = file.readlines()
 
     crabs = []
@@ -28,7 +28,7 @@ def get_fuel_linear():
 
 
 def get_fuel_quadratic():
-    with open("07_input.txt", "r") as file:
+    with open("inputs/07_input.txt", "r") as file:
         data = file.readlines()
 
     crabs = []

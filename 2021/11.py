@@ -5,7 +5,7 @@ import numpy as np
 def main():
     sync = False
     steps = 100
-    with open('11_input.txt', 'r') as file:
+    with open('inputs/11_input.txt', 'r') as file:
         input_ = file.readlines()
 
     data = []

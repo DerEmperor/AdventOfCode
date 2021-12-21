@@ -4,7 +4,7 @@ import numpy as np
 
 
 def main():
-    with open('13_input.txt', 'r') as file:
+    with open('inputs/13_input.txt', 'r') as file:
         input_ = file.readlines()
 
     # process input

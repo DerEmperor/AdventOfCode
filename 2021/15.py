@@ -16,7 +16,7 @@ class Node:
 
 
 def main():
-    with open('15_input.txt', 'r') as file:
+    with open('inputs/15_input.txt', 'r') as file:
         input_ = file.readlines()
 
     # process input

@@ -2,7 +2,7 @@ import time
 
 
 def get_winning_score():
-    with open("04_input.txt", "r") as file:
+    with open("inputs/04_input.txt", "r") as file:
         data = file.readlines()
 
     numbers = [int(x) for x in data[0].split(",")]
@@ -30,7 +30,7 @@ def get_winning_score():
 
 
 def get_loosing_score():
-    with open("04_input.txt", "r") as file:
+    with open("inputs/04_input.txt", "r") as file:
         data = file.readlines()
 
     numbers = [int(x) for x in data[0].split(",")]
