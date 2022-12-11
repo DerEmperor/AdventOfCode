@@ -1,0 +1,3 @@
+[submodule "AdventOfCodeInputs2022"]
+	path = 2022/inputs
+	url = git@github.com:DerEmperor/AdventOfCodeInputs2022.git
