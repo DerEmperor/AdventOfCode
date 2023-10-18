@@ -4,3 +4,6 @@
 [submodule "2021/AdventOfCodeInputs2021"]
 	path = 2021/inputs
 	url = git@github.com:DerEmperor/AdventOfCodeInputs2021.git
+[submodule "2023/inputs"]
+	path = 2023/inputs
+	url = git@github.com:DerEmperor/AdventOfCodeInputs2023.git
