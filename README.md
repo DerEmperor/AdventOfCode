@@ -1,6 +1,11 @@
 # Advent of code
 https://adventofcode.com/
 
+# inputs
+
+The creator of Advent of Code does not want the inputs to be leaked.
+That's why they are in private git submodules.
+
 # git stuff
 ## cloning repo
 ```bash
