@@ -111,7 +111,7 @@ def main(test):
 
 if __name__ == '__main__':
     start_time = time.time()
-
+    print("Expected:", 1651, 1707, 1986, 2464)
     print('Test')
     main(True)
     print('real')
