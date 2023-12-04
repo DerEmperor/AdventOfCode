@@ -1,7 +1,5 @@
-from __future__ import annotations
-
+#!/usr/bin/env python
 import time
-from collections import defaultdict
 
 CUBES = {
     'red': 12,
