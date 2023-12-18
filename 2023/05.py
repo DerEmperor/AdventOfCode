@@ -56,8 +56,15 @@ def get_input(test):
     return seeds, converters
 
 
-def main(test):
-    seeds, converters = get_input(test)
+def convert(args):
+    if len(args) == 2:
+        seeds, converters = args
+        print('    ', len(seeds))
+
+    elif len(args) == 3:
+        start, length, converters = args
+        print('    ', length)
+        seeds = list(range(start, start + length))
 
     conv = converters['seed-to-soil']
     soils = [conv.get_dst(s) for s in seeds]
@@ -80,21 +87,29 @@ def main(test):
     conv = converters['humidity-to-location']
     location = [conv.get_dst(s) for s in humidity]
 
-    print(seeds)
-    print(soils)
-    print(ferts)
-    print(waters)
-    print(temperature)
-    print(humidity)
-    print(location)
+    return min(location)
+
+
+def main(test):
+    seeds, converters = get_input(test)
+
+    part1 = convert((seeds, converters))
+    print('part1', part1)
+
+    part2 = float('inf')
+    for start, length in zip(seeds[::2], seeds[1::2]):
+        tmp = convert((start, length, converters))
+        part2 = min(part2, tmp)
+    print('part2', part2)
+
 
 if __name__ == '__main__':
     startTime = time.time()
 
-    print('Test')
-    main(True)
-    print('real')
-    # main(False)
+print('Test')
+main(True)
+print('real')
+main(False)
 
-    executionTime = (time.time() - startTime)
-    print('Execution time: ' + str(round(executionTime * 1000, 3)) + ' ms')
+executionTime = (time.time() - startTime)
+print('Execution time: ' + str(round(executionTime * 1000, 3)) + ' ms')
