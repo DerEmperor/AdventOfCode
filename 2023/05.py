@@ -3,11 +3,12 @@ from __future__ import annotations
 
 import time
 import re
-from typing import List
+from typing import List, Tuple
 
 
 class Range:
     def __init__(self, start_dst: int, start_src: int, length: int):
+        # end inclusive
         self.start = start_src
         self.end = start_src + length - 1
         self.offset = start_dst - start_src
@@ -23,19 +24,36 @@ class Converter:
 
     def add_range(self, start_dst: int, start_src: int, length: int):
         self.ranges.append(Range(start_dst, start_src, length))
+        self.ranges = sorted(self.ranges, key=lambda r: r.start)
 
-    def get_dst(self, value: int):
-        for r in self.ranges:
-            if r.start <= value <= r.end:
-                return value + r.offset
-        return value
+    def get_dst(self, value: int | Tuple[int, int]) -> List[int | Tuple[int, int]]:
+        if isinstance(value, int):
+            for r in self.ranges:
+                if r.start <= value <= r.end:
+                    return [value + r.offset]
+            return [value]
+
+        else:
+            start, end = value
+            for r in self.ranges:
+                if r.start <= start <= r.end:
+                    if end <= r.end:
+                        return [(start + r.offset, end + r.offset)]
+                    else:
+                        return [(start + r.offset, r.end + r.offset)] + self.get_dst((r.end + 1, end))
+                elif start < r.start:
+                    if end < r.start:
+                        return [(start, end)]
+                    else:
+                        return [(start, r.start - 1)] + self.get_dst((r.start, end))
+
+            return [(start, end)]
 
     def __repr__(self):
         return f'<Conv {self.name}:{[str(r) for r in self.ranges]}>'
 
 
 def get_input(test):
-    data = []
     filename = 'inputs/05_test.txt' if test else 'inputs/05.txt'
     with open(filename, 'r') as file:
         input_ = file.read()[:-1].split('\n\n')
@@ -56,60 +74,73 @@ def get_input(test):
     return seeds, converters
 
 
-def convert(args):
-    if len(args) == 2:
-        seeds, converters = args
-        print('    ', len(seeds))
-
-    elif len(args) == 3:
-        start, length, converters = args
-        print('    ', length)
-        seeds = list(range(start, start + length))
-
+def convert(seeds, converters):
+    print('seeds:', seeds)
     conv = converters['seed-to-soil']
-    soils = [conv.get_dst(s) for s in seeds]
+    soils = []
+    for s in seeds:
+        soils.extend(conv.get_dst(s))
+    print('soils', soils)
 
     conv = converters['soil-to-fertilizer']
-    ferts = [conv.get_dst(s) for s in soils]
+    ferts = []
+    for s in soils:
+        ferts.extend(conv.get_dst(s))
+    print('ferts', ferts)
 
     conv = converters['fertilizer-to-water']
-    waters = [conv.get_dst(s) for s in ferts]
+    waters = []
+    for s in ferts:
+        waters.extend(conv.get_dst(s))
+    print('waters', waters)
 
     conv = converters['water-to-light']
-    light = [conv.get_dst(s) for s in waters]
+    light = []
+    for s in waters:
+        light.extend(conv.get_dst(s))
+    print('light', light)
 
     conv = converters['light-to-temperature']
-    temperature = [conv.get_dst(s) for s in light]
+    temperature = []
+    for s in light:
+        temperature.extend(conv.get_dst(s))
+    print('temperature', temperature)
 
     conv = converters['temperature-to-humidity']
-    humidity = [conv.get_dst(s) for s in temperature]
+    humidity = []
+    for s in temperature:
+        humidity.extend(conv.get_dst(s))
+    print('humidity', humidity)
 
     conv = converters['humidity-to-location']
-    location = [conv.get_dst(s) for s in humidity]
+    location = []
+    for s in humidity:
+        location.extend(conv.get_dst(s))
+    print('location', location)
 
-    return min(location)
+    return location
 
 
 def main(test):
     seeds, converters = get_input(test)
+    print(min(convert(seeds, converters)))
 
-    part1 = convert((seeds, converters))
-    print('part1', part1)
-
-    part2 = float('inf')
+    seeds2 = []
     for start, length in zip(seeds[::2], seeds[1::2]):
-        tmp = convert((start, length, converters))
-        part2 = min(part2, tmp)
-    print('part2', part2)
+        seeds2.append((start, start + length - 1))
+    res = convert(seeds2, converters)
+    for start, end in res:
+        assert start <= end
+    print(min(start for start, end in res))
 
 
 if __name__ == '__main__':
     startTime = time.time()
 
-print('Test')
-main(True)
-print('real')
-main(False)
+    print('Test')
+    main(True)
+    print('real')
+    main(False)
 
-executionTime = (time.time() - startTime)
-print('Execution time: ' + str(round(executionTime * 1000, 3)) + ' ms')
+    executionTime = (time.time() - startTime)
+    print('Execution time: ' + str(round(executionTime * 1000, 3)) + ' ms')
