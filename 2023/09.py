@@ -15,6 +15,7 @@ def get_input(test: bool):
     filename = 'inputs/09_test.txt' if test else 'inputs/09.txt'
     with open(filename, 'r') as file:
         input_ = file.readlines()
+        input_ = ['5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25\n']
         for line in input_:
             data.append([int(x) for x in line[:-1].split()])
     return data
