@@ -10,6 +10,7 @@ part 2:
 """
 from __future__ import annotations
 
+import sys
 import time
 from concurrent.futures import ProcessPoolExecutor
 from pathlib import Path
@@ -81,12 +82,14 @@ def main(test: bool):
         for possible_arrangements in executor.map(helper_caller, data):
             sum1 += possible_arrangements
     print(sum1)
+    sys.stdout.flush()
 
     sum2 = 0
     with ProcessPoolExecutor() as executor:
         for possible_arrangements in executor.map(helper_caller2, data):
             sum2 += possible_arrangements
     print(sum2)
+    sys.stdout.flush()
 
 
 if __name__ == '__main__':
