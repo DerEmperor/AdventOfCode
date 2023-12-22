@@ -1,16 +1,14 @@
 #!/usr/bin/env python
 """
-runtime:
-test
-part 1: 1,8s
-part 2:
-real:
-part 1:
-part 2:
+Execution time:
+| part | 1      | 2               |
+|------|--------|-----------------|
+| test | 0.5 s  | 67 s            |
+| real | 1.85 s | 248 s = 4.1 min |
+sum: 5,5 min
 """
 from __future__ import annotations
 
-import sys
 import time
 from concurrent.futures import ProcessPoolExecutor
 from pathlib import Path
@@ -29,7 +27,15 @@ def get_input(test: bool):
     return data
 
 
+mem = {}
+
+
 def get_checksum(springs: List[str]) -> List[int]:
+    as_str = ''.join(springs)
+    res = mem.get(as_str, None)
+    if res is not None:
+        return res
+
     res = []
     i = 0
     while i < len(springs):
@@ -42,6 +48,7 @@ def get_checksum(springs: List[str]) -> List[int]:
                 i += 1
             res.append(cnt)
         i += 1
+    mem[as_str] = res
     return res
 
 
@@ -54,6 +61,12 @@ def helper(springs: List[str], checksum: List[int], i: int) -> int:
             return 1
         else:
             return 0
+
+    part_checksum = get_checksum(springs[:i])
+    if len(part_checksum) > len(checksum):
+        return 0
+    if len(part_checksum) > 1 and part_checksum[:-1] != checksum[:len(part_checksum) - 1]:
+        return 0
 
     springs[i] = '#'
     a = helper(springs, checksum, i + 1)
@@ -77,19 +90,31 @@ def helper_caller2(args: Tuple[List[str], List[int]]) -> int:
 
 def main(test: bool):
     data = get_input(test)
+
+    # single thread for debugging
+    """
+    sum1 = 0
+    for chunk in data:
+        springs, checksum = chunk
+        if checksum == [1, 6, 5]:
+            tmp = 5
+        res = helper_caller(chunk)
+        print(''.join(springs), checksum, res)
+        sum1 += res
+    print(sum1)
+    """
+
     sum1 = 0
     with ProcessPoolExecutor() as executor:
         for possible_arrangements in executor.map(helper_caller, data):
             sum1 += possible_arrangements
     print(sum1)
-    sys.stdout.flush()
 
     sum2 = 0
     with ProcessPoolExecutor() as executor:
         for possible_arrangements in executor.map(helper_caller2, data):
             sum2 += possible_arrangements
     print(sum2)
-    sys.stdout.flush()
 
 
 if __name__ == '__main__':
@@ -98,7 +123,7 @@ if __name__ == '__main__':
     print('Test')
     main(True)
     print('real')
-    #main(False)
+    main(False)
 
     executionTime = (time.time() - startTime)
     if executionTime > 1:
