@@ -19,5 +19,5 @@ git submodule update --init --recursive
 
 ## add submodule for new year
 ```bash
-git submodule add git@github.com:DerEmperor/AdventOfCodeInputs2023.git ./2023/inputs
+git submodule add git@github.com:DerEmperor/AdventOfCodeInputs2024.git ./2024/inputs
 ```
