@@ -14,6 +14,10 @@ def get_input(test):
 
 def main(test):
     data = get_input(test)
+    part1 = 0
+    part2 = 0
+    print('part1:', part1)
+    print('part2:', part2)
 
 
 if __name__ == '__main__':
