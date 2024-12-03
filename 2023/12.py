@@ -12,7 +12,6 @@ from concurrent.futures import ProcessPoolExecutor
 from pathlib import Path
 from typing import List, Tuple
 
-
 def get_input(test: bool) -> List[Tuple[str, Tuple[int, ...]]]:
     data = []
     filename = f"inputs/{Path(__file__).stem}{'_test' if test else ''}.txt"
@@ -21,6 +20,10 @@ def get_input(test: bool) -> List[Tuple[str, Tuple[int, ...]]]:
         for line in input_:
             springs, checksum = line[:-1].split(' ')
             checksum = tuple(int(x) for x in checksum.split(','))
+            new_springs = springs.replace('..', '.')
+            while new_springs != springs:
+                springs = new_springs
+                new_springs = springs.replace('..', '.')
             data.append((springs, checksum))
     return data
 
@@ -28,9 +31,8 @@ def get_input(test: bool) -> List[Tuple[str, Tuple[int, ...]]]:
 mem = {}
 
 
-# @functools.cache
 def get_checksum(springs: str) -> Tuple[int, ...]:
-    if len(springs) < 20:
+    if len(springs) < 30:
         res = mem.get(springs, None)
         if res is not None:
             return res
@@ -48,7 +50,7 @@ def get_checksum(springs: str) -> Tuple[int, ...]:
             res.append(cnt)
         i += 1
     res = tuple(res)
-    if len(springs) < 20:
+    if len(springs) < 30:
         mem[springs] = res
     return res
 
@@ -57,7 +59,6 @@ def str_repl(string: str, i: int, c: str):
     return string[:i] + c + string[i + 1:]
 
 
-@functools.cache
 def helper(springs: str, checksum: Tuple[int, ...], i: int) -> int:
     while i < len(springs) and springs[i] != '?':
         i += 1
