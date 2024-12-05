@@ -3,6 +3,25 @@ import time
 from collections import defaultdict
 
 
+class Page:
+    rules = {}
+
+    def __init__(self, page):
+        self.page = page
+
+    def __lt__(self, other):
+        return other.page in Page.rules[self.page]
+
+    def __eq__(self, other):
+        return self.page == other.page
+
+    def __str__(self):
+        return str(self.page)
+
+    def __repr__(self):
+        return f'A({self.page})'
+
+
 def get_input(test):
     filename = 'inputs/05_test.txt' if test else 'inputs/05.txt'
     with open(filename, 'r') as file:
@@ -24,6 +43,25 @@ def get_input(test):
 
 
 def main(test):
+    rules, pagess = get_input(test)
+    pagess = [[Page(page) for page in pages] for pages in pagess]
+    Page.rules = rules
+
+    part1 = 0
+    part2 = 0
+
+    for pages in pagess:
+        pages_sorted = sorted(pages)
+        if pages == pages_sorted:
+            part1 += pages[len(pages) // 2].page
+        else:
+            part2 += pages_sorted[len(pages) // 2].page
+
+    print('part1:', part1)
+    print('part2:', part2)
+
+
+def main2(test):
     rules, pagess = get_input(test)
 
     part1 = 0
