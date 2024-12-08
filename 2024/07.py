@@ -29,4 +29,7 @@ if __name__ == '__main__':
     main(False)
 
     executionTime = (time.time() - startTime)
-    print('Execution time: ' + str(round(executionTime * 1000, 3)) + ' ms')
+    if executionTime > 1:
+        print('Execution time:', str(round(executionTime, 1)), 's')
+    else:
+        print('Execution time:', str(round(executionTime * 1000, 1)), 'ms')
