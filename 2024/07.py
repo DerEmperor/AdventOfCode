@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 import time
+from statistics import multimode
+from typing import List
 
 
 def get_input(test: bool):
@@ -8,14 +10,48 @@ def get_input(test: bool):
     with open(filename, 'r') as file:
         input_ = file.readlines()
         for line in input_:
-            data.append(line[:-1])
+            line = line[:-1].replace(':', '')
+            data.append([int(x) for x in line.split(' ')])
     return data
+
+
+def get_number_possible_solutions(goal: int, numbers: List[int], concat:bool) -> bool:
+    if len(numbers) == 0:
+        return False
+    if len(numbers) == 1:
+        return goal == numbers[0]
+
+    a = numbers.pop(0)
+    b = numbers.pop(0)
+
+    numbers.insert(0, a + b)
+    if get_number_possible_solutions(goal, numbers, concat):
+        return True
+    numbers[0] = a * b
+    if get_number_possible_solutions(goal, numbers, concat):
+        return True
+    if concat:
+        numbers[0] = int(str(a) + str(b))
+        if get_number_possible_solutions(goal, numbers, concat):
+            return True
+
+    numbers[0] = b
+    numbers.insert(0, a)
+    return False
 
 
 def main(test: bool):
     data = get_input(test)
     part1 = 0
     part2 = 0
+
+    for line in data:
+        if get_number_possible_solutions(line[0], line[1:], False):
+            part1 += line[0]
+            part2 += line[0]
+        elif get_number_possible_solutions(line[0], line[1:], True):
+            part2 += line[0]
+
     print('part1:', part1)
     print('part2:', part2)
 
