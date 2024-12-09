@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import time
 from collections import defaultdict
-from typing import Tuple
+from typing import Tuple, Set
 
 
 class Pos:
@@ -32,10 +32,31 @@ class Pos:
         assert self.dimensions is not None
         return 0 <= self.x < self.dimensions[0] and 0 <= self.y < self.dimensions[1]
 
-    def get_antinodes(self, other: Pos) -> Tuple[Pos, Pos]:
+    def get_antinodes_1(self, other: Pos) -> Tuple[Pos, Pos]:
         p1 = Pos(2 * self.x - other.x, 2 * self.y - other.y)
-        p2 = Pos(2 * other.x - self.x, 2 * other.y - other.y)
+        p2 = Pos(2 * other.x - self.x, 2 * other.y - self.y)
         return p1, p2
+
+    def get_antinodes_2(self, other: Pos) -> Set[Pos]:
+        res = set()
+        i = 0
+        while True:
+            p = Pos((i + 1) * self.x - i * other.x, (i + 1) * self.y - i * other.y)
+            if p.in_bounds():
+                res.add(p)
+            else:
+                break
+            i += 1
+
+        i = 0
+        while True:
+            p = Pos((i + 1) * other.x - i * self.x, (i + 1) * other.y - i * self.y)
+            if p.in_bounds():
+                res.add(p)
+            else:
+                break
+            i += 1
+        return res
 
 
 def get_input(test: bool):
@@ -56,19 +77,21 @@ def main(test: bool):
     Pos.dimensions = dimensions
 
     part1 = set()
-    part2 = 0
+    part2 = set()
 
     for antenna, positions in antennas.items():
         for i, p1 in enumerate(positions):
             for p2 in positions[i + 1:]:
-                ap1, ap2 = p1.get_antinodes(p2)
+                ap1, ap2 = p1.get_antinodes_1(p2)
                 if ap1.in_bounds():
                     part1.add(ap1)
                 if ap2.in_bounds():
                     part1.add(ap2)
-    print(sorted(list(part1), key=lambda p: p.y))
+
+                part2 |= p1.get_antinodes_2(p2)
+
     print('part1:', len(part1))
-    print('part2:', part2)
+    print('part2:', len(part2))
 
 
 if __name__ == '__main__':
