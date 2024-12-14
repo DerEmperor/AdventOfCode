@@ -23,9 +23,7 @@ git submodule add git@github.com:DerEmperor/AdventOfCodeInputs2024.git ./2024/in
 ```
 
 ## pull submodule
-one of these 
 ```bash
-git pull --recurse-submodules
-git submodule update --init --recursive
-git submodule update --remote
+git submodule init
+git submodule update
 ```
