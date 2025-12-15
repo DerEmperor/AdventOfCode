@@ -42,13 +42,24 @@ def get_input(test: bool) -> Tuple[List[Present], List[Problem]]:
     return presents, problems
 
 
+def solvable(presents: List[Present], problem: List[Problem]) -> bool:
+    pass
+
+
+def part1(presents: List[Present], problems: List[Problem]) -> int:
+    res = 0
+    for problem in problems:
+        if solvable(presents, problem):
+            res += 1
+    return res
+
+
 def main(test: bool):
     presents, problems = get_input(test)
     print(presents)
     print(problems)
 
-
-    sum1 = 0
+    sum1 = part1(presents, problems)
     sum2 = 0
 
     sys.stdout = original_stdout  # enable print
