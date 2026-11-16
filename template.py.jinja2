@@ -2,14 +2,13 @@
 import os
 import sys
 import time
-from typing import List
 
 original_stdout = sys.stdout
 
 class WrongAnswer(Exception):
     pass
 
-def get_input(test: bool) -> List[str]:
+def get_input(test: bool) -> list[str]:
     data = []
     filename = 'inputs/{{ day }}_test.txt' if test else 'inputs/{{ day }}.txt'
     with open(filename, 'r') as file:
