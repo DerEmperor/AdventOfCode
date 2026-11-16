@@ -1,7 +1,5 @@
 import sys
 import time
-import numpy as np
-from scanf import scanf
 
 
 def get_permutation(beacon, permutation):
@@ -27,11 +25,11 @@ def get_permutation(beacon, permutation):
     elif permutation == 8:
         return -x, y, -z
     elif permutation == 9:
-        return y, -x, -z
+        return y, x, -z
     elif permutation == 10:
         return x, -y, -z
     elif permutation == 11:
-        return -y, x, -z
+        return -y, -x, -z
 
     elif permutation == 12:
         return -z, y, x
@@ -54,55 +52,52 @@ def get_permutation(beacon, permutation):
     elif permutation == 20:
         return x, -z, y,
     elif permutation == 21:
-        return z, -x, y
+        return z, x, y
     elif permutation == 22:
         return -x, z, y,
     elif permutation == 23:
-        return -z, x, y
+        return -z, -x, y
     else:
         print("ERROR")
         sys.exit(1)
 
 
 def main():
-    with open('inputs/19_input_test.txt', 'r') as file:
+    with open('inputs/19_input.txt', 'r') as file:
         input_ = file.readlines()
 
     beacons_by_scanners = []
 
-    scanner = -1
-
     for line in input_:
-        if line == '\n':
+        line = line.strip()
+        if not line:
             continue
 
-        if line[0:3] == '---':
-            scanner += 1
+        if line.startswith('---'):
             beacons_by_scanners.append([])
             continue
 
-        coord = scanf('%d,%d,%d\n', line)
-        beacons_by_scanners[scanner].append(coord)
+        coord = tuple(int(x) for x in line.split(','))
+        beacons_by_scanners[-1].append(coord)
 
+    scanner_positions = [(0, 0, 0)]
     all_beacons = set(beacons_by_scanners[0])
     beacons_by_scanners = beacons_by_scanners[1:]
 
-    while len(beacons_by_scanners) > 0:
+    while beacons_by_scanners:
         for beacons in beacons_by_scanners:
             found = False
             for permutation in range(24):
-                for right_beacon in all_beacons:
-                    for new_beacon in beacons:
-                        new_beacon = get_permutation(new_beacon, permutation)
+                rotated_beacons = [get_permutation(b, permutation) for b in beacons]
+                for rotated in rotated_beacons:
+                    for right_beacon in all_beacons:
                         offset = (
-                            new_beacon[0] - right_beacon[0], new_beacon[1] - right_beacon[1],
-                            new_beacon[2] - right_beacon[2])
+                            right_beacon[0] - rotated[0], right_beacon[1] - rotated[1],
+                            right_beacon[2] - rotated[2])
                         counter = 0
-                        for beacon in beacons:
-                            beacon = get_permutation(beacon, permutation)
-                            beacon = (beacon[0] + offset[0], beacon[1] + offset[1], beacon[2] + offset[2])
-
-                            if beacon in all_beacons:
+                        for beacon in rotated_beacons:
+                            if (beacon[0] + offset[0], beacon[1] + offset[1],
+                                beacon[2] + offset[2]) in all_beacons:
                                 counter += 1
 
                             if counter >= 12:
@@ -118,20 +113,25 @@ def main():
 
             if found:
                 # add beacons to all_beacons
-                print(offset)
-                for beacon in beacons:
-                    beacon = get_permutation(beacon, permutation)
-                    beacon = (beacon[0] + offset[0], beacon[1] + offset[1], beacon[2] + offset[2])
-
-                    all_beacons.add(beacon)
+                for beacon in rotated_beacons:
+                    all_beacons.add(
+                        (beacon[0] + offset[0], beacon[1] + offset[1], beacon[2] + offset[2]))
+                scanner_positions.append(offset)
                 beacons_by_scanners.remove(beacons)
                 break
         if not found:
             print("ERROR")
             sys.exit(1)
 
+    print('part1', len(all_beacons))
 
-    print(len(all_beacons))
+    part2 = 0
+    for p1 in scanner_positions:
+        for p2 in scanner_positions:
+            dist = abs(p1[0] - p2[0]) + abs(p1[1] - p2[1]) + abs(p1[2] - p2[2])
+            if dist > part2:
+                part2 = dist
+    print('part2', part2)
 
 
 if __name__ == '__main__':
