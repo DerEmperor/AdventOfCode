@@ -97,7 +97,14 @@ def part2(start_valve, valve, open_valves, time_left, foo):
         res += (time_left - 1) * valve.flow_rate
         score = max(score, res)
     if foo:
+        # Option A: hand the current valve (and everything else) to the elephant.
         res = part2(start_valve, start_valve, open_valves | {'AA'}, 26, False)
+        score = max(score, res)
+        # Option B: open the current valve ourselves, then hand the rest to the elephant.
+        # Needed when no further valve is reachable in time (otherwise Option B is only
+        # tried after travelling to a reachable valve, see the loop above).
+        res = part2(start_valve, start_valve, (open_valves - {valve.id}) | {'AA'}, 26, False)
+        res += (time_left - 1) * valve.flow_rate
         score = max(score, res)
     return score
 
