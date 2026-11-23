@@ -1,3 +1,7 @@
 .idea
 test.py
 venv
+/.agents
+/docs
+/AGENTS.md
+/skills-lock.json
